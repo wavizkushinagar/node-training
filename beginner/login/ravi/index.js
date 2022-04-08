@@ -1,17 +1,21 @@
 const express = require('express')
 const app = express()
 const port = 2022;
-const dbConn = require('./lib/db');
+//const dbConn = require('./lib/db');
 
-// const autor = require('./autor');
-// app.use(autor)
+const loginRouter = require('./src/router/loginUserRouter');
 
-app.get('/login', function (req, res) {
-    dbConn.query('SELECT * FROM login', function (error, results, fields) {
-    if (error) throw error;
-    return res.send({ error: false, data: results, message: 'users list.' });
-    });
-    });
+app.use('/login',loginRouter);
+
+
+// app.get('/login', function (req, res) {
+//     dbConn.query('SELECT * FROM login ', function (error, results) {
+//       return res.send({data : results})
+  // if (error) throw error;
+ //  return res.send({ error: false, data: results, message: 'users list.' });
+    
+//     });
+//     });
 
 
 
