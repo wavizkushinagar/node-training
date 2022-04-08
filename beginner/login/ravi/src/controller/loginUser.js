@@ -1,10 +1,10 @@
  var modelLogin = require('../model/loginModel'); 
 exports.loginUser = (req , res)=>{
     modelLogin.getAllUsers((error,users)=>{
-        console.log('we are here');
+       // console.log('we are here');
         if(error)
         res.send(error);
-        console.log(`UserLogin`,users);
+       // console.log(`UserLogin`,users);
         res.send(users)
     })
 }
@@ -17,7 +17,7 @@ exports.loginUserId =(req,res)=>{
     modelLogin.getLoginIdModel(req.params.id,(error,users)=>{
         if(error)
         res.send(error);
-        console.log(`single user data `,users);
+       // console.log(`single user data `,users);
         res.send(users)
     })
 }
