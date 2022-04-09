@@ -1,22 +1,39 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const bodyParser = require('body-parser')
+const app = express();
 const port = 2022;
-//const dbConn = require('./lib/db');
+const dbConn = require('./lib/db');
 
-const loginRouter = require('./src/router/loginUserRouter');
+// const loginRouter = require('./src/router/loginUserRouter');
+// app.use('/login',loginRouter);
 
-app.use('/login',loginRouter);
 
+// parse request data 
+// app.use(bodyParser.urlencoded({extended: false}));
 
-// app.get('/login', function (req, res) {
-//     dbConn.query('SELECT * FROM login ', function (error, results) {
-//       return res.send({data : results})
-  // if (error) throw error;
- //  return res.send({ error: false, data: results, message: 'users list.' });
+// app.use(bodyParser.json());
+
+app.get('/login', function (req, res) {
+    dbConn.query('SELECT * FROM login ', function (error, results) {
+      return res.send({data : results})
+  if (error) throw error;
+  return res.send({ error: false, data: results, message: 'users list.' });
     
-//     });
-//     });
+    });
+    });
 
+    // Add a new user  
+app.post('/user', function (req, res) {
+  let user = req.body;
+  if (!user) {
+  return res.status(400).send({ error:true, message: 'Please provide user' });
+  }
+  dbConn.query("INSERT INTO login SET ? ", { user: user }, function (error, results, fields) {
+  if (error) throw error;
+  return res.send({ error: false, data: results, message: 'New user has been created successfully.' });
+  });
+  });
+  
 
 
 app.listen(port, () => {
