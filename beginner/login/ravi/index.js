@@ -11,11 +11,11 @@ const dbConn = require('./lib/db');
 // parse request data 
 // app.use(bodyParser.urlencoded({extended: false}));
 
-// app.use(bodyParser.json());
+ app.use(bodyParser.json());
 
 app.get('/login', function (req, res) {
     dbConn.query('SELECT * FROM login ', function (error, results) {
-      return res.send({data : results})
+     // return res.send({data : results})
   if (error) throw error;
   return res.send({ error: false, data: results, message: 'users list.' });
     
@@ -24,11 +24,19 @@ app.get('/login', function (req, res) {
 
     // Add a new user  
 app.post('/user', function (req, res) {
-  let user = req.body;
-  if (!user) {
+ // let user = req.body.id;
+   let data = {
+     id:req.body.id,
+     name:req.body.name,
+     email:req.body.email,
+     password :req.body.password
+   }
+  //console.log(user)
+  //res.send("user")
+  if (!data) {
   return res.status(400).send({ error:true, message: 'Please provide user' });
   }
-  dbConn.query("INSERT INTO login SET ? ", { user: user }, function (error, results, fields) {
+  dbConn.query("INSERT INTO login SET ? ", data, function (error, results, fields) {
   if (error) throw error;
   return res.send({ error: false, data: results, message: 'New user has been created successfully.' });
   });
