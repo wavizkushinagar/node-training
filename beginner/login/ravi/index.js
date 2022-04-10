@@ -13,14 +13,44 @@ const dbConn = require('./lib/db');
 
 app.use(bodyParser.json());
 
+//login user api
+
 app.get('/login', function (req, res) {
-    dbConn.query('SELECT * FROM login ', function (error, results) {
-     // return res.send({data : results})
-  if (error) throw error;
-  return res.send({ error: false, data: results, message: 'users list.' });
+
+  var userEmail = req.body.email;
+  var userPassword = req.body.password;
+
+     if(userEmail && userPassword ){
+      // console.log(" not blank")
+     // console.log(userEmail);
+      //console.log(userPassword)
+      //`SELECT * FROM users WHERE email = ${db.escape(req.body.email)};`,
+
+      dbConn.query(`SELECT * FROM login WHERE email = ${db.escape(req.body.email)};`, function (error, result){
+       
+       console.log(result)
+       return res.send({data : result})
+
+      })
+
+
+
+     }else{
+       console.log('email and password field blank')
+     }
+
+
+  //   dbConn.query('SELECT * FROM login ', function (error, results) {
+  //    // return res.send({data : results})
+  // if (error) throw error;
+  // return res.send({ error: false, data: results, message: 'users list.' });
     
-  });
+  // });
     });
+
+
+
+
 
     // Add a new user  
 app.post('/user', function (req, res) {
@@ -37,11 +67,14 @@ app.post('/user', function (req, res) {
    }
   //console.log(user)
   //res.send("user")
-  if (!data) {    
+  if (!data) {   
+    //console.log("plz provide data") 
    return res.status(400).send({ error:true, message: 'Please provide user details' });
+   
   }
 
   const {name, email, password} = req.body;
+
   if (name && password &&  email) { 
     
     // isValidEmail is some custom email function to validate email which you might need write on your own or use npm module
