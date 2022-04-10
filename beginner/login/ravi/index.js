@@ -38,23 +38,26 @@ app.post('/user', function (req, res) {
   //console.log(user)
   //res.send("user")
   if (!data) {    
-  return res.status(400).send({ error:true, message: 'Please provide user details' });
+   return res.status(400).send({ error:true, message: 'Please provide user details' });
   }
 
-  const {name, email, password} = req.body
+  const {name, email, password} = req.body;
   if (name && password &&  email) { 
     
     // isValidEmail is some custom email function to validate email which you might need write on your own or use npm module
    
     dbConn.query("INSERT INTO login SET ? ", data, function (error, results, fields) {
       if (error) {
+        console.log("Data base query error", error.message);
         return res.status(400).send({ error:true, message: 'Something went wrong' });
       }
+      console.log("Request Processed successful");
       return res.send({ error: false, data: results, message: 'New user has been created successfully.' });
       });
       
   }
   else{
+    console.log("Validation Error");
     return res.status(204).send({ error:true, message: 'Validation error: Required field is missing' });
   }
 
