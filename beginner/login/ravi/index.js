@@ -26,7 +26,7 @@ app.get('/login', function (req, res) {
       //console.log(userPassword)
       //`SELECT * FROM users WHERE email = ${db.escape(req.body.email)};`,
 
-      dbConn.query(`SELECT * FROM login WHERE email = ${db.escape(req.body.email)};`, function (error, result){
+      dbConn.query(`SELECT * FROM login WHERE email = ?;`, userEmail, function (error, result){
        
        console.log(result)
        return res.send({data : result})
