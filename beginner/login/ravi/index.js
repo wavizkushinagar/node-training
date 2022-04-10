@@ -11,7 +11,7 @@ const dbConn = require('./lib/db');
 // parse request data 
 // app.use(bodyParser.urlencoded({extended: false}));
 
- app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 app.get('/login', function (req, res) {
     dbConn.query('SELECT * FROM login ', function (error, results) {
@@ -25,25 +25,33 @@ app.get('/login', function (req, res) {
     // Add a new user  
 app.post('/user', function (req, res) {
  // let user = req.body.id;
+
+ /**
+  * @Ravi Do not use id
+  */
    let data = {
-     id:req.body.id,
+     id:req.body.id,  // @Ravi Comment this line and run
      name:req.body.name,
      email:req.body.email,
      password :req.body.password
    }
   //console.log(user)
   //res.send("user")
-  if (!data) {
-  return res.status(400).send({ error:true, message: 'Please provide user' });
+  if (!data) {    
+  return res.status(400).send({ error:true, message: 'Please provide user details' });
   }
+  
+  /**
+   * @Ravi Validate Name, email and password it should not be undefined or empty
+   */
+
   dbConn.query("INSERT INTO login SET ? ", data, function (error, results, fields) {
   if (error) throw error;
-  return res.send({ error: false, data: results, message: 'New user has been created successfully.' });
+    return res.send({ error: false, data: results, message: 'New user has been created successfully.' });
   });
   });
   
-
-
+  
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
