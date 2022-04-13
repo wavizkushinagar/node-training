@@ -3,26 +3,21 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 2022;
 const dbConn = require("./lib/db");
-
-// const loginRouter = require('./src/router/loginUserRouter');
-// app.use('/login',loginRouter);
-
-// parse request data
-// app.use(bodyParser.urlencoded({extended: false}));
+const { json } = require("body-parser");
 
 app.use(bodyParser.json());
 
-//login user api
 
 app.get("/login", function (req, res) {
   var userEmail = req.body.email;
   var userPassword = req.body.password;
 
-  if (userEmail && userPassword) {
-    // console.log(" not blank")
-    // console.log(userEmail);
-    //console.log(userPassword)
+  console.log("Request Object", JSON.stringify(req));
+  console.log("Request Object", JSON.stringify(req.body));
+  console.log("Request Object", JSON.stringify(req.params));
 
+
+  if (userEmail && userPassword) {
     dbConn.query(
       `SELECT * FROM login WHERE email = ?;`,
       userEmail,
@@ -34,18 +29,17 @@ app.get("/login", function (req, res) {
             .send({ error: true, message: "Something went wrong" });
         }
         if (result.length>0) {
-          
           if (result[0]["password"] === userPassword) {
-            console.log("user login");
+            console.log("User login successful");
             return res.status(200).send({ msg: "login successfully" });
           } else {
-            console.log("password miss match");
+            console.log("User password missmatch");
             return res.status(401).send({ msg: " password is incorrect!" });
           }
 
         } else {
-          console.log("user not exist");
-          return res.status(401).send({ msg:"user not exist"})
+          console.log("User not exist");
+          return res.status(401).send({ msg:"User does not exists"})
         }
       }
     );
@@ -55,33 +49,24 @@ app.get("/login", function (req, res) {
   }
 });
 
-// Add a new user
 app.post("/user", function (req, res) {
-  // let user = req.body.id;
-
-  /**
-   * @Ravi Do not use id
-   */
   let data = {
-    //  id:req.body.id,  // @Ravi Comment this line and run
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
   };
-  //console.log(user)
-  //res.send("user")
+
+  console.log("Request Object", JSON.stringify(req));
+  console.log("Request Object", JSON.stringify(req.body));
+  console.log("Request Object", JSON.stringify(req.params));
   if (!data) {
-    //console.log("plz provide data")
+    console.log("User details are missing");
     return res
       .status(400)
       .send({ error: true, message: "Please provide user details" });
   }
-
   const { name, email, password } = req.body;
-
   if (name && password && email) {
-    // isValidEmail is some custom email function to validate email which you might need write on your own or use npm module
-
     dbConn.query(
       "INSERT INTO login SET ? ",
       data,
@@ -110,11 +95,6 @@ app.post("/user", function (req, res) {
       });
   }
 });
-
-/**
- * @Ravi Validate Name, email and password it should not be undefined or empty
- */
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
