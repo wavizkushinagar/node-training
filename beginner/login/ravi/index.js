@@ -3,18 +3,26 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 2022;
 const dbConn = require("./lib/db");
-const { json } = require("body-parser");
+//const { json } = require("body-parser");
 
 app.use(bodyParser.json());
 
+const cors = require('cors');
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
 
-app.get("/login", function (req, res) {
+
+app.post("/login", function (req, res) {
   var userEmail = req.body.email;
   var userPassword = req.body.password;
 
-  console.log("Request Object", JSON.stringify(req));
-  console.log("Request Object", JSON.stringify(req.body));
-  console.log("Request Object", JSON.stringify(req.params));
+  // console.log("Request Object", JSON.stringify(req));
+  // console.log("Request Object", JSON.stringify(req.body));
+  // console.log("Request Object", JSON.stringify(req.params));
 
 
   if (userEmail && userPassword) {
@@ -56,9 +64,9 @@ app.post("/user", function (req, res) {
     password: req.body.password,
   };
 
-  console.log("Request Object", JSON.stringify(req));
-  console.log("Request Object", JSON.stringify(req.body));
-  console.log("Request Object", JSON.stringify(req.params));
+  // console.log("Request Object", JSON.stringify(req));
+  // console.log("Request Object", JSON.stringify(req.body));
+  // console.log("Request Object", JSON.stringify(req.params));
   if (!data) {
     console.log("User details are missing");
     return res
