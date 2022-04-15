@@ -71,7 +71,7 @@ app.post("/user", function (req, res) {
     console.log("User details are missing");
     return res
       .status(400)
-      .send({ error: true, message: "Please provide user details" });
+      .send({ msg: "Please provide user details" });
   }
   const { name, email, password } = req.body;
   if (name && password && email) {
@@ -81,15 +81,10 @@ app.post("/user", function (req, res) {
       function (error, results, fields) {
         if (error) {
           console.log("Data base query error", error.message);
-          return res
-            .status(400)
-            .send({ error: true, message: "Something went wrong" });
+          return res.status(400).send({  msg: "User Already registered " });
         }
         console.log("Request Processed successful");
-        return res.send({
-          error: false,
-          data: results,
-          message: "New user has been created successfully.",
+        return res.send({error: false,data: results, msg: "New user has been created successfully.",
         });
       }
     );
