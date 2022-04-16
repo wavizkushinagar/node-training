@@ -99,31 +99,31 @@ app.post("/user", function (req, res) {
   }
 });
 
-app.get('/delete/(:email)', function(req, res, next) {
-  let user = { email: req.body.email }
-     console.log(user)
-  if(user){
-    dbConn.query('DELETE  FROM login WHERE email = '+ req.params.email, user, function(error, result) {
-      if (error) {
-         console.log("Data base query error", error.message);
-         return res
-           .status(400)
-           .send({ error: true, message: "Something went wrong" });
-       }else{
-             if(result.affectedRows == 0){
-               res.status(400).send({mag:"data not delete"})
-             }else{
-               res.status(200).send({mag:"data deleted"})
-             }
+// app.get('/delete/(:email)', function(req, res, next) {
+//   let user = { email: req.body.email }
+//      console.log(user)
+//   if(user){
+//     dbConn.query('DELETE  FROM login WHERE email = '+ req.params.email, user, function(error, result) {
+//       if (error) {
+//          console.log("Data base query error", error.message);
+//          return res
+//            .status(400)
+//            .send({ error: true, message: "Something went wrong" });
+//        }else{
+//              if(result.affectedRows == 0){
+//                res.status(400).send({mag:"data not delete"})
+//              }else{
+//                res.status(200).send({mag:"data deleted"})
+//              }
             
-          }
-         })
-     }else{
-    res.status(400).send({msg:" enter email"})
+//           }
+//          })
+//      }else{
+//     res.status(400).send({msg:" enter email"})
 
-  }
+//   }
   
-  })
+//   })
 
 
 
